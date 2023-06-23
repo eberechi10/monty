@@ -1,36 +1,16 @@
-#ifndef _MONTY_H
-#define _MONTY_H
+#ifndef MONTY_H
+#define MONTY_H
 
-#define VALID_DATA		0
-#define MIN_ARGS		2
+#define _P_C_SOURCE 200809L
 
-#define INVALID_ER	        100
-#define MALLOC_ER	        101
-#define INVLID_PARM_ER	        102
-#define STACK_METHD		300
-#define QUEUE_METHD		301
-
-#define USAGE_ER		200
-#define PUSH_ER		        201
-#define PINT_ER		        202
-#define POP_ER			203
-#define SWAP_ER		        204
-#define ADD_ER			205
-#define SUB_ER			206
-#define DIV_ER			207
-#define ZERO_ER_DIV	        208
-#define MUL_ER			209
-#define MOD_ER			210
-#define F_PCHAR_ER		211
-#define E_PCHAR_ER		212
-
-#include <string.h>
-#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <ctype.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <fcntl.h>
-#include <stddef.h>
+#include <ctype.h>
+
 
 /**
  * struct stack_s - doubly linked list representation of a stack (or queue)
@@ -39,7 +19,7 @@
  * @next: points to the next element of the stack (or queue)
  *
  * Description: doubly linked list node structure
- * for stack, queues, LIFO, FIFO
+ * for stack, queues, LIFO, FIFO Holberton project
  */
 typedef struct stack_s
 {
@@ -49,12 +29,34 @@ typedef struct stack_s
 } stack_t;
 
 /**
+ * struct global_mtys - it is the montys struct useed in the funct.
+ * @nline: it is the stack or the queue.
+ * @datas: the line
+ * @arg_m: the second arg inside the line
+ * @head: it is linked list.
+ * @filed: the descr of the file.
+ * @buf: it is the string
+ *
+ * Description: doubly linked list node structure
+ * for stack, queues, LIFO, FIFO.
+ */
+typedef struct global_mtys
+{
+	stack_t *head;
+	FILE *filed;
+	char *buf;
+	int nline;
+	unsigned int datas;
+	char *arg_m;
+} global_t;
+
+/**
  * struct instruction_s - opcode and its function
  * @opcode: the opcode
  * @f: function to handle the opcode
  *
  * Description: opcode and its function
- * for stack, queues, LIFO, FIFO
+ * for stack, queues, LIFO, FIFO.
  */
 typedef struct instruction_s
 {
@@ -62,37 +64,37 @@ typedef struct instruction_s
 	void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
 
-extern stack_t *head;
+extern global_t mtys;
 
-void _add(stack_t **stack, unsigned int line_number);
-void _div(stack_t **stack, unsigned int line_number);
-int get_digits(char *s);
-int get_push_node(char *node);
-void get_num_args(int argn);
-void get_scan_permission(char *path);
-void hold_big_errors(int errno, unsigned int counter);
-void hold_err(int errno, char *opcd, unsigned int counter, char *scan_line);
-void hold_malloc_er(int errno, char *opcd, unsigned int counter);
-void hold_op_err(int errno, unsigned int counter);
-int hold_exe(char *op_cd, char *node, unsigned int counter, int indc);
-void _mod(stack_t **stack, unsigned int line_number);
-void _mul(stack_t **stack, unsigned int line_number);
-void _nop(stack_t **stack, unsigned int line_number);
-void _pall(stack_t **stack, unsigned int line_number);
-void _pchar(stack_t **stack, unsigned int line_number);
-void _pint(stack_t **stack, unsigned int line_number);
-void _pop(stack_t **stack, unsigned int line_number);
-void _pstr(stack_t **stack, unsigned int line_number);
-void _push(stack_t **stack, unsigned int node);
-void _pushqueue(stack_t **stack, unsigned int data);
-void _rotr(stack_t **stack, unsigned int line_number);
-void _rotl(stack_t **stack, unsigned int line_number);
-void (*put_op(char *s))(stack_t **, unsigned int);
-unsigned int stack_counter(stack_t *stack);
-void reles_stack(void);
-void _sub(stack_t **stack, unsigned int line_number);
-void _swap(stack_t **stack, unsigned int line_number);
 int main(int argc, char *argv[]);
-FILE *get_file(char *path);
+void reles_mtys(void);
+void start_mtys(FILE *filed);
+FILE *ver_input(int argc, char *argv[]);
+void free_list(stack_t *head);
+stack_t *add_last_node_stack(stack_t **head, const int n);
+stack_t *add_start_node(stack_t **head, const int n);
+void (*sel_opcode(char *opcd))(stack_t **stack, unsigned int line_number);
+void *realloc_m(void *ptr, unsigned int old, unsigned int new);
+void *calloc_m(unsigned int count, unsigned int size);
+void pchar(stack_t **stack, unsigned int count);
+void pstr(stack_t **stack, unsigned int count);
+void mod(stack_t **stack, unsigned int count);
+void _div(stack_t **stack, unsigned int count);
+void mul(stack_t **stack, unsigned int count);
+void pop(stack_t **stack, unsigned int count);
+void swap(stack_t **stack, unsigned int count);
+void push(stack_t **stack, unsigned int line_number);
+void pall(stack_t **stack, unsigned int line_number);
+void pint(stack_t **stack, unsigned int count);
+void nop(stack_t **stack, unsigned int count);
+void sub(stack_t **stack, unsigned int count);
+void queue(stack_t **stack, unsigned int count);
+void stack(stack_t **stack, unsigned int count);
+void add(stack_t **stack, unsigned int count);
+void rotr(stack_t **stack, unsigned int count);
+void rotl(stack_t **stack, unsigned int count);
+char *strtok(char *s, char *del);
+int _strcmp(char *s1, char *s2);
+int get_char(char *s, char c);
 
-#endif /* _MONTY_H_ */
+#endif
